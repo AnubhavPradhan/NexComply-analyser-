@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # PostgreSQL database for metadata
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexcomply-postgres
+    environment:
+      POSTGRES_DB: nexcomply
+      POSTGRES_USER: nexcomply
+      POSTGRES_PASSWORD: nexcomply_secure_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexcomply"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI application
+  nexcomply-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: nexcomply-api
+    environment:
+      - DATABASE_URL=postgresql://nexcomply:nexcomply_secure_password@postgres:5432/nexcomply
+      - VECTOR_DB_PATH=/app/data/vector_db
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - LOG_LEVEL=INFO
+    volumes:
+      - api_data:/app/data
+      - api_logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["uvicorn", "src.api.routes:app", "--host", "0.0.0.0", "--port", "8000"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Streamlit dashboard
+  nexcomply-dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: nexcomply-dashboard
+    environment:
+      - DATABASE_URL=postgresql://nexcomply:nexcomply_secure_password@postgres:5432/nexcomply
+      - VECTOR_DB_PATH=/app/data/vector_db
+      - API_HOST=nexcomply-api
+      - API_PORT=8000
+    volumes:
+      - dashboard_data:/app/data
+      - dashboard_logs:/app/logs
+    ports:
+      - "8501:8501"
+    depends_on:
+      - nexcomply-api
+    command: ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+    driver: local
+  api_data:
+    driver: local
+  api_logs:
+    driver: local
+  dashboard_data:
+    driver: local
+  dashboard_logs:
+    driver: local
+
+networks:
+  default:
+    name: nexcomply-network
