@@ -48,9 +48,9 @@ This repository contains compliance and GRC (Governance, Risk, and Compliance) a
 ## Domain-Specific Guidelines
 
 ### Compliance Analysis
-- When analyzing frameworks, ensure alignment with industry standards
+- When analyzing frameworks, ensure control mappings align with the specific requirements of each framework (e.g., ISO 27001 Annex A controls, NIST CSF subcategories, SOC 2 trust service criteria)
 - Consider multiple compliance frameworks (ISO 27001, SOC 2, NIST CSF, etc.)
-- Document control mappings clearly
+- Document control mappings clearly with traceability to framework requirements
 - Include risk ratings and justifications
 
 ### Policy Management
@@ -60,8 +60,8 @@ This repository contains compliance and GRC (Governance, Risk, and Compliance) a
 - Maintain consistent terminology across policies
 
 ### Risk Assessment
-- Use standardized risk scoring methodologies
-- Document risk assessment criteria
+- Use standardized risk scoring methodologies such as quantitative approaches (FAIR, OCTAVE) or qualitative scales (High/Medium/Low with clearly defined criteria)
+- Document risk assessment criteria including likelihood and impact definitions
 - Include mitigation recommendations
 - Track remediation timelines
 
@@ -82,7 +82,7 @@ This repository contains compliance and GRC (Governance, Risk, and Compliance) a
 
 ### When Modifying Notebooks
 - Test all code cells before committing
-- Ensure data file paths are relative or configurable
+- Ensure data file paths are relative or configurable using environment variables or configuration files (e.g., `DATA_DIR` environment variable or `config.yaml`)
 - Clear sensitive data from outputs before committing
 - Update markdown explanations if logic changes
 
