@@ -2,6 +2,9 @@
 NexComply Analyzer - Streamlit Dashboard
 
 Enterprise-grade GRC automation platform with comprehensive UI.
+
+Note: Install the package in development mode with `pip install -e .` 
+      before running this application.
 """
 import streamlit as st
 import pandas as pd
@@ -9,18 +12,26 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 from io import BytesIO
-import sys
-from pathlib import Path
 
-# Add src to path
-sys.path.insert(0, str(Path(__file__).parent))
-
-from src.models.compliance_analyzer import RAGComplianceAnalyzer
-from src.models.risk_assessor import AdvancedRiskAssessor, RiskFactor
-from src.data.framework_loader import FrameworkLoader
-from src.data.policy_processor import PolicyProcessor
-from src.utils.reporting import ReportGenerator
-from src.config.settings import get_settings
+try:
+    from src.models.compliance_analyzer import RAGComplianceAnalyzer
+    from src.models.risk_assessor import AdvancedRiskAssessor, RiskFactor
+    from src.data.framework_loader import FrameworkLoader
+    from src.data.policy_processor import PolicyProcessor
+    from src.utils.reporting import ReportGenerator
+    from src.config.settings import get_settings
+except ImportError:
+    st.error("""
+    ⚠️ Import Error: Cannot find the NexComply modules.
+    
+    Please install the package in development mode:
+    ```
+    pip install -e .
+    ```
+    
+    Or run from the project root directory.
+    """)
+    st.stop()
 
 # Page configuration
 st.set_page_config(

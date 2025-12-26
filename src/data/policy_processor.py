@@ -5,6 +5,7 @@ Handles loading and processing of policy documents in various formats.
 """
 from typing import Optional, List
 from pathlib import Path
+from io import BytesIO
 import PyPDF2
 import docx
 from loguru import logger
@@ -161,7 +162,6 @@ class PolicyProcessor:
             str: Extracted text.
         """
         try:
-            from io import BytesIO
             pdf_file = BytesIO(pdf_bytes)
             pdf_reader = PyPDF2.PdfReader(pdf_file)
             
@@ -186,7 +186,6 @@ class PolicyProcessor:
             str: Extracted text.
         """
         try:
-            from io import BytesIO
             docx_file = BytesIO(docx_bytes)
             doc = docx.Document(docx_file)
             

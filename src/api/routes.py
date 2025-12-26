@@ -3,6 +3,7 @@ FastAPI routes for NexComply Analyzer API.
 """
 from typing import List, Dict, Any
 from datetime import datetime
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
@@ -23,11 +24,39 @@ from src.models.risk_assessor import AdvancedRiskAssessor, RiskFactor
 from src.data.framework_loader import FrameworkLoader
 from src.utils.reporting import ReportGenerator
 
-# Initialize FastAPI app
+# Global instances (lazy initialization)
+_analyzer: RAGComplianceAnalyzer = None
+_risk_assessor: AdvancedRiskAssessor = None
+_framework_loader: FrameworkLoader = None
+_report_generator: ReportGenerator = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Application lifespan context manager.
+    
+    Handles startup and shutdown events.
+    """
+    # Startup
+    logger.info("Starting NexComply Analyzer API")
+    logger.info(f"API Version: 1.0.0")
+    settings = get_settings()
+    logger.info(f"Embedding Model: {settings.embedding_model}")
+    logger.info(f"Vector DB Path: {settings.vector_db_path}")
+    
+    yield
+    
+    # Shutdown
+    logger.info("Shutting down NexComply Analyzer API")
+
+
+# Initialize FastAPI app with lifespan
 app = FastAPI(
     title="NexComply Analyzer API",
     description="Enterprise-grade GRC automation platform with RAG capabilities",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Add CORS middleware
@@ -39,12 +68,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Global instances (lazy initialization)
-_analyzer: RAGComplianceAnalyzer = None
-_risk_assessor: AdvancedRiskAssessor = None
-_framework_loader: FrameworkLoader = None
-_report_generator: ReportGenerator = None
 
 
 def get_analyzer() -> RAGComplianceAnalyzer:
@@ -279,22 +302,6 @@ async def list_frameworks(
     except Exception as e:
         logger.error(f"Error listing frameworks: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-
-# Application startup
-@app.on_event("startup")
-async def startup_event():
-    """Initialize application on startup."""
-    logger.info("Starting NexComply Analyzer API")
-    logger.info(f"API Version: 1.0.0")
-    logger.info(f"Embedding Model: {settings.embedding_model}")
-    logger.info(f"Vector DB Path: {settings.vector_db_path}")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    """Cleanup on application shutdown."""
-    logger.info("Shutting down NexComply Analyzer API")
 
 
 if __name__ == "__main__":
