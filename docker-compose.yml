@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  nexcomply-analyser:
+    build: .
+    container_name: nexcomply-analyser
+    volumes:
+      - ./Dummy KL:/app/Dummy KL:ro
+      - ./Frameworks:/app/Frameworks:ro
+      - ./New Format Policy Docs:/app/New Format Policy Docs:ro
+      - ./Questionnaires:/app/Questionnaires:ro
+      - ./Risk Reports:/app/Risk Reports:rw
+      - ./Session on GRC:/app/Session on GRC:ro
+      - ./First Session:/app/First Session:ro
+      - ./Second Session:/app/Second Session:ro
+    command: analyze
+    environment:
+      - PYTHONUNBUFFERED=1
