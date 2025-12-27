@@ -97,3 +97,10 @@ temp/
 # Editor files
 *.sublime-project
 *.sublime-workspace
+
+# Generated reports (keep templates, ignore timestamped outputs)
+Risk Reports/risk_report_*.csv
+Risk Reports/risk_report_*.json
+
+# Copied notebooks (original notebooks in session folders are preserved)
+notebooks/*.ipynb
