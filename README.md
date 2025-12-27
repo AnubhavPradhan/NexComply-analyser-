@@ -114,14 +114,13 @@ print(f"JSON Report: {reports['json']}")
 NexComply-analyser-/
 ├── src/nexcomply_analyser/      # Main package
 │   ├── __init__.py              # Package initialization
+│   ├── cli.py                   # Command-line interface
 │   ├── ingestion.py             # Data ingestion logic
 │   ├── parsing.py               # Text parsing utilities
 │   ├── questionnaire.py         # Questionnaire structures
 │   ├── frameworks.py            # Framework mappings
 │   ├── risk_report.py           # Report generation
 │   └── utils.py                 # Utility functions
-├── scripts/                     # CLI scripts
-│   └── cli.py                   # Command-line interface
 ├── tests/                       # Test suite
 │   ├── conftest.py              # Test fixtures
 │   ├── test_cli.py              # CLI tests

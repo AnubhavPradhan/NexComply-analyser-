@@ -1,0 +1,36 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-12-27T06:11:12.817713",
+    "version": "0.1.0",
+    "report_type": "risk_assessment"
+  },
+  "summary": {
+    "policy_documents": 17,
+    "questionnaires": 1,
+    "frameworks": 1
+  },
+  "risk_scores": {
+    "policy_documents": 71.0,
+    "questionnaires": 46.0,
+    "frameworks": 41.0
+  },
+  "framework_summary": {
+    "total_files": 1,
+    "xlsx_files": 1,
+    "pdf_files": 0
+  },
+  "questionnaire_analysis": {
+    "overall_score": 70.0,
+    "category_scores": {
+      "governance": 80.0,
+      "security": 50.0,
+      "data_privacy": 80.0
+    },
+    "risk_summary": {
+      "LOW": 0,
+      "MEDIUM": 0,
+      "HIGH": 0,
+      "CRITICAL": 0
+    }
+  }
+}

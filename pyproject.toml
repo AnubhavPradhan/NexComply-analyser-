@@ -42,7 +42,7 @@ dev = [
 ]
 
 [project.scripts]
-nexcomply-analyser = "scripts.cli:cli"
+nexcomply-analyser = "nexcomply_analyser.cli:cli"
 
 [project.urls]
 Homepage = "https://github.com/AnubhavPradhan/NexComply-analyser-"
@@ -55,6 +55,9 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["nexcomply_analyser*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.txt", "*.md"]
 
 [tool.black]
 line-length = 100

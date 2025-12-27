@@ -30,15 +30,15 @@ jobs:
     
     - name: Lint with flake8
       run: |
-        flake8 src/ scripts/ tests/ --count --show-source --statistics
+        flake8 src/ tests/ --count --show-source --statistics
     
     - name: Check formatting with black
       run: |
-        black --check src/ scripts/ tests/
+        black --check src/ tests/
     
     - name: Check import sorting with isort
       run: |
-        isort --check-only src/ scripts/ tests/
+        isort --check-only src/ tests/
     
     - name: Run tests with pytest
       run: |
@@ -79,8 +79,8 @@ jobs:
     - name: Run all linters
       run: |
         echo "=== Flake8 ===" 
-        flake8 src/ scripts/ tests/ --count --statistics || true
+        flake8 src/ tests/ --count --statistics || true
         echo "=== Black ===" 
-        black --check src/ scripts/ tests/ || true
+        black --check src/ tests/ || true
         echo "=== isort ===" 
-        isort --check-only src/ scripts/ tests/ || true
+        isort --check-only src/ tests/ || true
